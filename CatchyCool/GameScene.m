@@ -158,7 +158,13 @@ static const int ballHitCategory = 1;
         
     }
     
-    [self updateWithTimeSinceLastUpdate:timeSinceLast];
+    if (timeSinceLast<5) {
+        
+        //just to check the ball bouncing thing, stopping the balls after some time
+        [self updateWithTimeSinceLastUpdate:timeSinceLast];
+        
+        
+    }
     
     [self removeNodesOutOfScreen];
     
@@ -206,14 +212,34 @@ static const int ballHitCategory = 1;
                                             [SKAction removeFromParent]]]];
     
     //setup your methods and other things here
-    [firstNode removeFromParent];
-    [secondNode removeFromParent];
     
-    firstNode=nil;
-    secondNode=nil;
+    [self bounceTheBalls:firstNode secondBall:secondNode];
+    
+    //uncomment the remove lines for bounce testing
+//    [firstNode removeFromParent];
+//    [secondNode removeFromParent];
+//    
+//    firstNode=nil;
+//    secondNode=nil;
     
     
 
+}
+
+
+
+-(void)bounceTheBalls:(SKSpriteNode *) ball1 secondBall:(SKSpriteNode *)ball2{
+    
+    GLKVector2 velocity = GLKVector2Make(ball1.physicsBody.velocity.dx, ball1.physicsBody.velocity.dy);
+    GLKVector2 direction = GLKVector2Normalize(velocity);
+    GLKVector2 newVelocity = GLKVector2MultiplyScalar(direction, 2);
+
+    GLKVector2 velocity2 = GLKVector2Make(ball2.physicsBody.velocity.dx, ball2.physicsBody.velocity.dy);
+    GLKVector2 direction2 = GLKVector2Normalize(velocity2);
+    GLKVector2 newVelocity2 = GLKVector2MultiplyScalar(direction2, 2);
+
+    ball1.physicsBody.velocity = CGVectorMake(newVelocity.x,newVelocity.y);
+    ball2.physicsBody.velocity=CGVectorMake(newVelocity2.x,newVelocity2.y);
 }
 
 
@@ -255,7 +281,7 @@ static const int ballHitCategory = 1;
 
 - (void)updateWithTimeSinceLastUpdate:(CFTimeInterval)timeSinceLast {
     
-    NSLog(@"child count is %d",self.children.count);
+    NSLog(@"child count is %lu",(unsigned long)self.children.count);
     self.lastSpawnTimeInterval += timeSinceLast;
     if (self.lastSpawnTimeInterval > 1) {
         self.lastSpawnTimeInterval = 0;
