@@ -9,7 +9,9 @@
 #import "GameScene.h"
 #import "GameViewController.h"
 
-static const int ballHitCategory = 1;
+static const int blueBallHitCategory = 1<<0;
+static const int wallHitCategory = 1<<1;
+static const int pinkBallHitCategory= 1<<2;
 
 
 @interface GameScene ()<SKPhysicsContactDelegate>
@@ -36,6 +38,8 @@ static const int ballHitCategory = 1;
         self.backgroundColor = [UIColor blueColor];
         self.physicsWorld.contactDelegate = self;
        // [self.physicsWorld setGravity:CGVectorMake(0, 0)];
+        self.physicsBody=[SKPhysicsBody bodyWithEdgeLoopFromRect:CGRectMake(self.frame.origin.x, self.frame.origin.y+100, self.frame.size.width, self.frame.size.height-200)];   //to make balls bounce
+        self.physicsBody.categoryBitMask=wallHitCategory;
     }
     
     return self;
@@ -44,23 +48,100 @@ static const int ballHitCategory = 1;
 -(void)didMoveToView:(SKView *)view {
     /* Setup your scene here */
     
+    [self bounceTheBlueBallAtPoint:CGPointMake(100, 200)];
+    //[self bounceThePinkBall];
+    [self bounceTheBlueBallAtPoint:CGPointMake(300, 100)];
+    
+    
+}
+
+-(void)bounceTheBlueBallAtPoint:(CGPoint)point{
+    
+    
+    SKSpriteNode * blueBall = [SKSpriteNode spriteNodeWithImageNamed:@"blueGem.png"];
+    blueBall.name=@"rightballs";
+    
+    blueBall.physicsBody=[SKPhysicsBody bodyWithCircleOfRadius:blueBall.frame.size.width/2];
+    
+    
+    blueBall.physicsBody.categoryBitMask=blueBallHitCategory;
+    blueBall.physicsBody.collisionBitMask=blueBallHitCategory|pinkBallHitCategory|wallHitCategory;
+    blueBall.physicsBody.contactTestBitMask=blueBallHitCategory|pinkBallHitCategory|wallHitCategory;
+    
+    blueBall.physicsBody.dynamic=YES;
+    blueBall.physicsBody.affectedByGravity=NO;
+    blueBall.physicsBody.restitution=1.0;
+    blueBall.physicsBody.friction=0.0;
+    blueBall.physicsBody.linearDamping=0.0;
+    blueBall.physicsBody.angularDamping=0.0;
+    
+    blueBall.position=point;
+    
+    [self addChild:blueBall];
+    
+    
+   
+    //applying impulse to bounce off
+    CGVector impulse = CGVectorMake(30.0,60.0);
+    [blueBall.physicsBody applyImpulse:impulse];
+    
+    
+
+    
+    
+}
+
+-(void)bounceThePinkBall{
+    
+    
+    SKSpriteNode * pinkBall = [SKSpriteNode spriteNodeWithImageNamed:@"pinkGem.png"];
+    pinkBall.name=@"rightballs";
+    
+    pinkBall.physicsBody=[SKPhysicsBody bodyWithCircleOfRadius:pinkBall.frame.size.width/2];
+    
+    
+    pinkBall.physicsBody.categoryBitMask=pinkBallHitCategory;
+    pinkBall.physicsBody.collisionBitMask=pinkBallHitCategory|blueBallHitCategory|wallHitCategory;
+    pinkBall.physicsBody.contactTestBitMask=pinkBallHitCategory|blueBallHitCategory|wallHitCategory;
+    
+    pinkBall.physicsBody.dynamic=YES;
+    pinkBall.physicsBody.affectedByGravity=NO;
+    pinkBall.physicsBody.restitution=1.0;
+    pinkBall.physicsBody.friction=0.0;
+    pinkBall.physicsBody.linearDamping=0.0;     //<1.0
+    pinkBall.physicsBody.angularDamping=0.0;  //<1.0
+    
+    pinkBall.position=CGPointMake(200, 200);
+    
+    [self addChild:pinkBall];
+    
+    
+    
+    //applying impulse to bounce off
+    CGVector impulse = CGVectorMake(60.0,30.0);
+    [pinkBall.physicsBody applyImpulse:impulse];
+    
+    
+    
+    
     
 }
 
 -(void)startRightToLeftWave{
     
-   SKSpriteNode * rightBall = [SKSpriteNode spriteNodeWithImageNamed:@"blueGem.png"];
-    rightBall.name=@"rightballs";
+   SKSpriteNode * blueBall = [SKSpriteNode spriteNodeWithImageNamed:@"blueGem.png"];
+    blueBall.name=@"rightballs";
     
-    rightBall.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:rightBall.frame.size];
-    rightBall.physicsBody.categoryBitMask=ballHitCategory;
-    rightBall.physicsBody.contactTestBitMask=ballHitCategory;
-    rightBall.physicsBody.collisionBitMask=ballHitCategory;
-    rightBall.physicsBody.dynamic=YES;
-    rightBall.physicsBody.affectedByGravity=NO;
-    rightBall.physicsBody.usesPreciseCollisionDetection=YES;
-
-    [self addChild:rightBall];
+    blueBall.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:blueBall.frame.size];
+    
+    blueBall.physicsBody.categoryBitMask=blueBallHitCategory;
+    blueBall.physicsBody.contactTestBitMask=blueBallHitCategory|wallHitCategory|pinkBallHitCategory;
+    blueBall.physicsBody.collisionBitMask=blueBallHitCategory|pinkBallHitCategory|wallHitCategory;
+    blueBall.physicsBody.dynamic=YES;
+    blueBall.physicsBody.affectedByGravity=NO;
+    blueBall.physicsBody.usesPreciseCollisionDetection=YES;
+  
+    [self addChild:blueBall];
 
     
     // Determine where to spawn the monster along the Y axis
@@ -71,7 +152,7 @@ static const int ballHitCategory = 1;
     
     // Create the monster slightly off-screen along the right edge,
     // and along a random position along the Y axis as calculated above
-    rightBall.position = CGPointMake(self.frame.size.width + rightBall.size.width/2, actualY);
+    blueBall.position = CGPointMake(self.frame.size.width + blueBall.size.width/2, actualY);
     
     // Determine speed of the monster
     int minDuration = 2.0;
@@ -80,27 +161,29 @@ static const int ballHitCategory = 1;
     int actualDuration = (arc4random() % rangeDuration) + minDuration;
     
     // Create the actions
-    SKAction * actionMove = [SKAction moveTo:CGPointMake(-rightBall.size.width/2, actualY) duration:actualDuration];
+    SKAction * actionMove = [SKAction moveTo:CGPointMake(-blueBall.size.width/2, actualY) duration:actualDuration];
     SKAction * actionMoveDone = [SKAction removeFromParent];
-    [rightBall runAction:[SKAction sequence:@[actionMove, actionMoveDone]]];
+    [blueBall runAction:[SKAction sequence:@[actionMove, actionMoveDone]]];
+    
     
     
 }
 
 -(void)startLeftToRightWave{
     
-   SKSpriteNode * leftBall = [SKSpriteNode spriteNodeWithImageNamed:@"pinkGem.png"];
-    leftBall.name=@"leftballs";
-    leftBall.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:leftBall.frame.size];
-    leftBall.physicsBody.categoryBitMask=ballHitCategory;
-    leftBall.physicsBody.contactTestBitMask=ballHitCategory;
-    leftBall.physicsBody.collisionBitMask=ballHitCategory;
-    leftBall.physicsBody.dynamic=YES;
-    leftBall.physicsBody.affectedByGravity=NO;
-    leftBall.physicsBody.usesPreciseCollisionDetection=YES;
+   SKSpriteNode * pinkBall = [SKSpriteNode spriteNodeWithImageNamed:@"pinkGem.png"];
+    pinkBall.name=@"leftballs";
+    pinkBall.physicsBody=[SKPhysicsBody bodyWithRectangleOfSize:pinkBall.frame.size];
     
+    pinkBall.physicsBody.categoryBitMask=pinkBallHitCategory;
+    pinkBall.physicsBody.contactTestBitMask=pinkBallHitCategory|blueBallHitCategory|wallHitCategory;
+    pinkBall.physicsBody.collisionBitMask=pinkBallHitCategory|blueBallHitCategory|wallHitCategory;
+    pinkBall.physicsBody.dynamic=YES;
+    pinkBall.physicsBody.affectedByGravity=NO;
+    pinkBall.physicsBody.usesPreciseCollisionDetection=YES;
     
-    [self addChild:leftBall];
+    pinkBall.position=CGPointMake(20, 20);
+    [self addChild:pinkBall];
     
     
     // Determine where to spawn the monster along the Y axis
@@ -111,7 +194,7 @@ static const int ballHitCategory = 1;
     
     // Create the monster slightly off-screen along the right edge,
     // and along a random position along the Y axis as calculated above
-    leftBall.position = CGPointMake(leftBall.size.width/2, actualY);
+    pinkBall.position = CGPointMake(pinkBall.size.width/2, actualY);
     
     // Determine speed of the monster
     int minDuration = 2.0;
@@ -120,9 +203,9 @@ static const int ballHitCategory = 1;
     int actualDuration = (arc4random() % rangeDuration) + minDuration;
     
     // Create the actions
-    SKAction * actionMove = [SKAction moveTo:CGPointMake(leftBall.size.width/2+self.frame.size.width, actualY) duration:actualDuration];
+    SKAction * actionMove = [SKAction moveTo:CGPointMake(pinkBall.size.width/2+self.frame.size.width, actualY) duration:actualDuration];
     SKAction * actionMoveDone = [SKAction removeFromParent];
-    [leftBall runAction:[SKAction sequence:@[actionMove, actionMoveDone]]];
+    [pinkBall runAction:[SKAction sequence:@[actionMove, actionMoveDone]]];
     
     
     
@@ -174,24 +257,30 @@ static const int ballHitCategory = 1;
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
     
-  SKSpriteNode * leftBall = (SKSpriteNode*)contact.bodyA.node;
-  SKSpriteNode *  rightBall = (SKSpriteNode *)contact.bodyB.node;
+  SKSpriteNode * firstNode = (SKSpriteNode*)contact.bodyA.node;
+  SKSpriteNode *  secondNode = (SKSpriteNode *)contact.bodyB.node;
     
-    if(leftBall.physicsBody .categoryBitMask == ballHitCategory ||  rightBall.physicsBody.categoryBitMask == ballHitCategory)
+    //need a condition to detect when ball hit the wall
+    
+    if((firstNode.physicsBody .categoryBitMask == blueBallHitCategory &&  secondNode.physicsBody.categoryBitMask == pinkBallHitCategory) || (firstNode.physicsBody .categoryBitMask == pinkBallHitCategory &&  secondNode.physicsBody.categoryBitMask == blueBallHitCategory))
     {
         
         NSLog(@"collision");
         
-        leftBall.physicsBody.affectedByGravity=YES;
-        rightBall.physicsBody.affectedByGravity=YES;
+        firstNode.physicsBody.affectedByGravity=YES;
+        secondNode.physicsBody.affectedByGravity=YES;
       
-       // leftBall.physicsBody.velocity=CGVectorMake(1.0, 8.0);
         
-        [self addCrashParticleNode:leftBall.position betweeenNodesFirst:leftBall secondNode:rightBall];
+        [self addCrashParticleNode:firstNode.position betweeenNodesFirst:firstNode secondNode:secondNode];
         
-        leftBall=nil;
-        rightBall=nil;
+        firstNode=nil;
+        secondNode=nil;
         
+    }
+    
+    if (firstNode.physicsBody .categoryBitMask == wallHitCategory ||  secondNode.physicsBody.categoryBitMask == wallHitCategory) {
+        
+        NSLog(@"do nothing");
     }
 }
 
@@ -213,14 +302,13 @@ static const int ballHitCategory = 1;
     
     //setup your methods and other things here
     
-    [self bounceTheBalls:firstNode secondBall:secondNode];
     
     //uncomment the remove lines for bounce testing
-//    [firstNode removeFromParent];
-//    [secondNode removeFromParent];
-//    
-//    firstNode=nil;
-//    secondNode=nil;
+    [firstNode removeFromParent];
+    [secondNode removeFromParent];
+    
+    firstNode=nil;
+    secondNode=nil;
     
     
 
@@ -228,19 +316,6 @@ static const int ballHitCategory = 1;
 
 
 
--(void)bounceTheBalls:(SKSpriteNode *) ball1 secondBall:(SKSpriteNode *)ball2{
-    
-    GLKVector2 velocity = GLKVector2Make(ball1.physicsBody.velocity.dx, ball1.physicsBody.velocity.dy);
-    GLKVector2 direction = GLKVector2Normalize(velocity);
-    GLKVector2 newVelocity = GLKVector2MultiplyScalar(direction, 2);
-
-    GLKVector2 velocity2 = GLKVector2Make(ball2.physicsBody.velocity.dx, ball2.physicsBody.velocity.dy);
-    GLKVector2 direction2 = GLKVector2Normalize(velocity2);
-    GLKVector2 newVelocity2 = GLKVector2MultiplyScalar(direction2, 2);
-
-    ball1.physicsBody.velocity = CGVectorMake(newVelocity.x,newVelocity.y);
-    ball2.physicsBody.velocity=CGVectorMake(newVelocity2.x,newVelocity2.y);
-}
 
 
 
@@ -285,8 +360,8 @@ static const int ballHitCategory = 1;
     self.lastSpawnTimeInterval += timeSinceLast;
     if (self.lastSpawnTimeInterval > 1) {
         self.lastSpawnTimeInterval = 0;
-        [self startRightToLeftWave];
-        [self startLeftToRightWave];
+       // [self startRightToLeftWave];
+        //[self startLeftToRightWave];
     }
 }
 
