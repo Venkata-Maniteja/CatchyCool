@@ -74,7 +74,7 @@ static NSString * const kRingNodeName       = @"movable";
     _background.position = CGPointMake(0,0);
     
     
-    [self addBallOfType:@"hRedBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"redball" atPoint:CGPointMake(200, 100) withBounce:YES withVelocity:CGVectorMake(-10, 0) andHitCategory:blueBallHitCategory];
+    [self addBallOfType:@"hRedBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"redball" atPoint:CGPointMake(200, 100) withBounce:YES withVelocity:CGVectorMake(20, 30) andHitCategory:blueBallHitCategory];
     
     
     [self addChild:_background];
@@ -91,7 +91,7 @@ static NSString * const kRingNodeName       = @"movable";
     _ringNode.position=CGPointMake(300, 300);
    _ringNode.anchorPoint=CGPointMake(0.5,0.5);
     _ringNode.name=kRingNodeName;
-    _ringNode.zPosition = 100;
+    _ringNode.zPosition = 200;
     [self addChild:_ringNode];
     
 
@@ -191,7 +191,7 @@ static NSString * const kRingNodeName       = @"movable";
     UITouch *touch = [touches anyObject];
     CGPoint touchLocation = [touch locationInNode:self];
     
-    [self selectNodeForTouch:touchLocation];
+    [self rotateRingAtTouch:touchLocation];
     
     
 }
@@ -210,15 +210,21 @@ static NSString * const kRingNodeName       = @"movable";
     
 }
 
-- (void)selectNodeForTouch:(CGPoint)touchLocation {
+-(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    //cancel the rotation
+    [_ringNode removeAllActions];
+}
+
+- (void)rotateRingAtTouch:(CGPoint)touchLocation {
     
         SKAction *rotateAction = [SKAction rotateByAngle:degToRad(180.0f) duration:2.0];
         
         [_ringNode runAction:[SKAction repeatActionForever:rotateAction]];
-        
-    
     
 }
+
+
 
 float degToRad(float degree) {
     return degree / 180.0f * M_PI;
@@ -260,6 +266,8 @@ float degToRad(float degree) {
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
     
+    //somehoe firstnode is returned as SKScene, dont get frightned....
+    
   SKSpriteNode * firstNode = (SKSpriteNode*)contact.bodyA.node;
   SKSpriteNode *  secondNode = (SKSpriteNode *)contact.bodyB.node;
     
@@ -286,6 +294,10 @@ float degToRad(float degree) {
         NSLog(@"do nothing");
         
         [self runAction:[SKAction playSoundFileNamed:@"basketBall bounce.WAV" waitForCompletion:NO]];
+        
+        secondNode.anchorPoint=CGPointMake(0.5, 0.5);
+            [secondNode runAction:[SKAction rotateByAngle:degToRad(180.0f) duration:3.0]];//:degToRad(5.0f) duration:1.0]];
+        
     }
 }
 
