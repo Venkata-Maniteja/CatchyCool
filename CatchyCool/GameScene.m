@@ -12,12 +12,19 @@
 static const int blueBallHitCategory = 1<<0;
 static const int wallHitCategory = 1<<1;
 static const int pinkBallHitCategory= 1<<2;
+static NSString * const kRingNodeName = @"movable";
 
-
-@interface GameScene ()<SKPhysicsContactDelegate>
+@interface GameScene ()<SKPhysicsContactDelegate>{
+    
+    int seconds;
+}
 
 @property (nonatomic) NSTimeInterval lastSpawnTimeInterval;
 @property (nonatomic) NSTimeInterval lastUpdateTimeInterval;
+
+@property (nonatomic, strong) SKSpriteNode *background;
+@property (nonatomic, strong) SKSpriteNode *ringNode;
+
 
 @end
 
@@ -35,7 +42,8 @@ static const int pinkBallHitCategory= 1<<2;
         
         NSLog(@"Size: %@", NSStringFromCGSize(self.size));
         
-        self.backgroundColor = [UIColor blueColor];
+        self.backgroundColor = [UIColor colorWithRed:250/255.0 green:240/255.0 blue:230/255.0 alpha:1];
+        
         self.physicsWorld.contactDelegate = self;
        // [self.physicsWorld setGravity:CGVectorMake(0, 0)];
         self.physicsBody=[SKPhysicsBody bodyWithEdgeLoopFromRect:CGRectMake(self.frame.origin.x, self.frame.origin.y+100, self.frame.size.width, self.frame.size.height-200)];   //to make balls bounce
@@ -48,18 +56,58 @@ static const int pinkBallHitCategory= 1<<2;
 -(void)didMoveToView:(SKView *)view {
     /* Setup your scene here */
     
-    [self bounceTheBlueBallAtPoint:CGPointMake(100, 200)];
-    //[self bounceThePinkBall];
-    [self bounceTheBlueBallAtPoint:CGPointMake(300, 100)];
+    seconds=0;
     
+    [self addBackground];
+
+}
+
+
+
+-(void)addBackground{
+    
+    _background = [SKSpriteNode spriteNodeWithImageNamed:@"parkImage.jpg"];
+    _background.size = self.frame.size;
+    _background.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    [self addChild:_background];
+    
+    
+    [self addRing];
+}
+
+-(void)addRing{
+    
+    _ringNode=[SKSpriteNode spriteNodeWithImageNamed:@"hue_ring.png"];
+    _ringNode.size=CGSizeMake(80, 80);
+    _ringNode.position=CGPointMake(0, 0);
+    _ringNode.anchorPoint=CGPointMake(0.5,0.5);
+    _ringNode.name=kRingNodeName;
+    [_background addChild:_ringNode];
+    
+    [self bounceTheBlueBallAtPoint:CGPointMake(0, -150)];
+    
+    
+    //    [self bounceThePinkBallAtPoint:CGPointMake(0, 0)];
+    
+//    [self bounceTheBlueBallAtPoint:[self randomPointGenerator]];
+
+}
+
+-(CGPoint)randomPointGenerator{
+    
+    int x = arc4random() % (int) self.frame.size.width;
+    int y = arc4random() % (int) self.frame.size.height;
+    
+    return CGPointMake(x, y);
     
 }
 
 -(void)bounceTheBlueBallAtPoint:(CGPoint)point{
     
     
-    SKSpriteNode * blueBall = [SKSpriteNode spriteNodeWithImageNamed:@"blueGem.png"];
-    blueBall.name=@"rightballs";
+    SKSpriteNode * blueBall = [SKSpriteNode spriteNodeWithImageNamed:@"hRedBall.png"];
+    blueBall.name=@"leftballs";
+    blueBall.size=CGSizeMake(75, 75);
     
     blueBall.physicsBody=[SKPhysicsBody bodyWithCircleOfRadius:blueBall.frame.size.width/2];
     
@@ -75,15 +123,17 @@ static const int pinkBallHitCategory= 1<<2;
     blueBall.physicsBody.linearDamping=0.0;
     blueBall.physicsBody.angularDamping=0.0;
     
-    blueBall.position=point;
+    //blueBall.position=point;
     
-    [self addChild:blueBall];
+    [_background addChild:blueBall];
+   
+    blueBall.position=point;
     
     
    
     //applying impulse to bounce off
-    CGVector impulse = CGVectorMake(30.0,60.0);
-    [blueBall.physicsBody applyImpulse:impulse];
+//    CGVector impulse = CGVectorMake(-30.0,-30.0);
+//    [blueBall.physicsBody applyImpulse:impulse];
     
     
 
@@ -91,11 +141,12 @@ static const int pinkBallHitCategory= 1<<2;
     
 }
 
--(void)bounceThePinkBall{
+-(void)bounceThePinkBallAtPoint:(CGPoint)point{
     
     
-    SKSpriteNode * pinkBall = [SKSpriteNode spriteNodeWithImageNamed:@"pinkGem.png"];
+    SKSpriteNode * pinkBall = [SKSpriteNode spriteNodeWithImageNamed:@"sGreenBall.png"];
     pinkBall.name=@"rightballs";
+    pinkBall.size=CGSizeMake(50, 50);
     
     pinkBall.physicsBody=[SKPhysicsBody bodyWithCircleOfRadius:pinkBall.frame.size.width/2];
     
@@ -111,14 +162,13 @@ static const int pinkBallHitCategory= 1<<2;
     pinkBall.physicsBody.linearDamping=0.0;     //<1.0
     pinkBall.physicsBody.angularDamping=0.0;  //<1.0
     
-    pinkBall.position=CGPointMake(200, 200);
-    
-    [self addChild:pinkBall];
+    pinkBall.position=point;
+//    [self addChild:pinkBall];
     
     
     
     //applying impulse to bounce off
-    CGVector impulse = CGVectorMake(60.0,30.0);
+    CGVector impulse = CGVectorMake(30.0,60.0);
     [pinkBall.physicsBody applyImpulse:impulse];
     
     
@@ -212,44 +262,76 @@ static const int pinkBallHitCategory= 1<<2;
     
 }
 
--(void)startSecondWave{
-    
-}
 
--(void)startThirdWave{
-    
-}
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
     
     UITouch *touch = [touches anyObject];
     CGPoint touchLocation = [touch locationInNode:self];
-    NSLog(@"you touched at %@",NSStringFromCGPoint(touchLocation));
+    
+    [self selectNodeForTouch:touchLocation];
+    
     
 }
 
+-(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint positionInScene = [touch locationInNode:self];
+    CGPoint previousPosition = [touch previousLocationInNode:self];
+    
+    CGPoint translation = CGPointMake(positionInScene.x - previousPosition.x, positionInScene.y - previousPosition.y); //trying to add 30,30 offset
+    
+             [self panForTranslation:translation];
+    
+    NSLog(@"ring position is %@",NSStringFromCGPoint(_ringNode.position));
+    
+}
+
+- (void)selectNodeForTouch:(CGPoint)touchLocation {
+    
+        SKAction *rotateAction = [SKAction rotateByAngle:degToRad(180.0f) duration:2.0];
+        
+        [_ringNode runAction:[SKAction repeatActionForever:rotateAction]];
+        
+    
+    
+}
+
+float degToRad(float degree) {
+    return degree / 180.0f * M_PI;
+}
+
+- (CGPoint)boundLayerPos:(CGPoint)newPos {
+    CGSize winSize = self.size;
+    CGPoint retval = newPos;
+    retval.x = MIN(retval.x, 0);
+    retval.x = MAX(retval.x, -[_background size].width+ winSize.width);
+    retval.y = [self position].y;
+    return retval;
+}
+
+- (void)panForTranslation:(CGPoint)translation {
+    CGPoint position = [_ringNode position];
+        [_ringNode setPosition:CGPointMake(position.x + translation.x, position.y + translation.y)]; //trying to give 30,30 offset
+    
+}
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
    
-    CFTimeInterval timeSinceLast = currentTime - self.lastUpdateTimeInterval;
-    self.lastUpdateTimeInterval = currentTime;
-    if (timeSinceLast > 1) { // more than a second since last update
-        timeSinceLast = 1.0 / 60.0;
-        self.lastUpdateTimeInterval = currentTime;
+    seconds++;
+//    NSLog(@"x value is %d",x/60);
+    if (seconds/60 <=0) {
+       // [self bounceThePinkBallAtPoint:[self randomPointGenerator]];
         
     }
     
-    if (timeSinceLast<5) {
-        
-        //just to check the ball bouncing thing, stopping the balls after some time
-        [self updateWithTimeSinceLastUpdate:timeSinceLast];
-        
-        
-    }
+    [self checkSpriteMovement];
     
-    [self removeNodesOutOfScreen];
+    //not needed at this point
+    //[self removeNodesOutOfScreen];
     
 }
 
@@ -354,17 +436,21 @@ static const int pinkBallHitCategory= 1<<2;
     
 }
 
-- (void)updateWithTimeSinceLastUpdate:(CFTimeInterval)timeSinceLast {
-    
-    NSLog(@"child count is %lu",(unsigned long)self.children.count);
-    self.lastSpawnTimeInterval += timeSinceLast;
-    if (self.lastSpawnTimeInterval > 1) {
-        self.lastSpawnTimeInterval = 0;
-       // [self startRightToLeftWave];
-        //[self startLeftToRightWave];
-    }
-}
 
+-(void)checkSpriteMovement{
+    
+    [self enumerateChildNodesWithName:@"leftballs" usingBlock:^(SKNode * _Nonnull node, BOOL * _Nonnull stop) {
+       
+        SKSpriteNode *ball=(SKSpriteNode *)node;
+        
+        if (ball.physicsBody.resting) {
+            
+            NSLog(@"The ball position is %@",NSStringFromCGPoint(ball.position));
+        }
+        
+    }];
+    
+}
 
 
 @end
