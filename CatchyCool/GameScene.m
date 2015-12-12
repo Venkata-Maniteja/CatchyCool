@@ -14,6 +14,7 @@ static const int wallHitCategory            = 1<<1;
 static const int pinkBallHitCategory        = 1<<2;
 static const int ringHitCategory            = 1<<3;
 static const int greenHitCategory           = 1<<4;
+static const int redHitCategory             = 1<<5;
 static NSString * const kRingNodeName       = @"movable";
 
 @interface GameScene ()<SKPhysicsContactDelegate>{
@@ -74,9 +75,14 @@ static NSString * const kRingNodeName       = @"movable";
     _background.position = CGPointMake(0,0);
     
     
-    [self addBallOfType:@"hRedBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"redball" atPoint:CGPointMake(200, 100) withBounce:YES withVelocity:CGVectorMake(20, 30) andHitCategory:blueBallHitCategory];
+    [self addBallOfType:@"hGreenBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"greenball" atPoint:CGPointMake(100, 100) withBounce:YES withVelocity:[self backwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
     
+    [self addBallOfType:@"hRedBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"redball" atPoint:CGPointMake(200, 100) withBounce:YES withVelocity:[self hitTotopWithSpeed:60] andHitCategory:pinkBallHitCategory];
     
+    [self addBallOfType:@"hYellowBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"yellowball" atPoint:CGPointMake(400, 100) withBounce:YES withVelocity:[self hitToLeftWithSpeed:80] andHitCategory:blueBallHitCategory];
+    
+    [self addBallOfType:@"hBlackBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"blackball" atPoint:CGPointMake(200, 300) withBounce:YES withVelocity:[self forwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
+
     [self addChild:_background];
     
     
@@ -109,6 +115,8 @@ static NSString * const kRingNodeName       = @"movable";
     
 }
 
+//need to add angle of hit to these methods
+
 -(CGVector)hitToLeftWithSpeed:(float)speed{
     
     return CGVectorMake(-speed, 0);
@@ -140,6 +148,57 @@ static NSString * const kRingNodeName       = @"movable";
 }
 
 
+//add methods to positipon the ball
+
+
+-(CGPoint)addBallAtCenterWithOffsetX:(int)x withOffsetY:(int)y{
+    
+    return CGPointMake(100+x, 100+y);
+}
+-(CGPoint)addBallAtTopLeftWithOffsetX:(int) x withOffsetY:(int)y{
+    
+    return CGPointMake(200+x, 100+y);
+}
+
+-(CGPoint)addBallAtTopRightWithOffsetX:(int)x withOffsetY:(int)y{
+    
+    return CGPointMake(100+x, 100+y);
+}
+
+-(CGPoint)addBallAtBottomRightWithOffsetX:(int)x withOffsetY:(int)y{
+    
+    return CGPointMake(100+x, 2100+y);
+}
+
+-(CGPoint)addBallAtBottomLeftWithOffsetX:(int)x withOffsetY:(int)y{
+    
+    return CGPointMake(100+x, 200+y);
+}
+
+
+-(void)removeAllBalls{
+    
+    [self enumerateChildNodesWithName:@"redballs" usingBlock:^(SKNode *node,BOOL *stop){
+        
+        SKSpriteNode *ball = (SKSpriteNode *)node;
+            [ball removeFromParent];
+            NSLog(@"left ball removed");
+            ball=nil;
+        
+    }];
+    
+    [self enumerateChildNodesWithName:@"blueballs" usingBlock:^(SKNode *node,BOOL *stop){
+        
+        SKSpriteNode *ball = (SKSpriteNode *)node;
+        [ball removeFromParent];
+        NSLog(@"left ball removed");
+        ball=nil;
+        
+    }];
+
+    
+}
+
 
 -(void)addBallOfType:(NSString *)imageName ofSize:(CGSize) size addSpriteName:(NSString *)name atPoint:(CGPoint)point withBounce:(BOOL) bounce withVelocity:(CGVector)velocity andHitCategory:(int) category{
     
@@ -166,13 +225,12 @@ static NSString * const kRingNodeName       = @"movable";
     
     [self addChild:ball];
     
-    
+    //need to add real physics to this method,like slow when hit something
   
     //applying impulse to bounce off
     
     if (bounce) {
         CGVector impulse = velocity;
-//        ball.physicsBody.velocity=CGVectorMake(0, 0);
         [ball.physicsBody applyImpulse:impulse];
         
     }
@@ -261,6 +319,7 @@ float degToRad(float degree) {
     //[self removeNodesOutOfScreen];
     
 }
+
 
 
 -(void)didBeginContact:(SKPhysicsContact *)contact
