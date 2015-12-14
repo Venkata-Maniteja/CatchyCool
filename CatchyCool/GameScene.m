@@ -17,6 +17,17 @@ static const int greenHitCategory           = 1<<4;
 static const int redHitCategory             = 1<<5;
 static NSString * const kRingNodeName       = @"movable";
 
+
+static  NSString * const hRedBall=@"Rplanet_75.png";
+static  NSString * const mRedBall=@"Rplanet_50.png";
+static  NSString * const sRedBall=@"Rplanet_25.png";
+static  NSString * const hGreenBall=@"Gplanet_75.png";
+static  NSString * const mGreenBall=@"Gplanet_50.png";
+static  NSString * const sGreenBall=@"Gplanet_25.png";
+static  NSString * const hBlueBall=@"Bplanet_75.png";
+static  NSString * const mBlueBall=@"Bplanet_50.png";
+static  NSString * const sBlueBall=@"Bplanet_25.png";
+
 @interface GameScene ()<SKPhysicsContactDelegate>{
     
     int seconds;
@@ -69,19 +80,19 @@ static NSString * const kRingNodeName       = @"movable";
 
 -(void)addBackground{
     
-    _background = [SKSpriteNode spriteNodeWithImageNamed:@"parkImage.jpg"];
+    _background = [SKSpriteNode spriteNodeWithImageNamed:@"spacebackground.png"];
     _background.size = self.frame.size;
     _background.anchorPoint=CGPointMake(0, 0);
     _background.position = CGPointMake(0,0);
     
     
-    [self addBallOfType:@"hGreenBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"greenball" atPoint:CGPointMake(100, 100) withBounce:YES withVelocity:[self backwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
+    [self addBallOfType:hBlueBall ofSize:CGSizeMake(75, 75) addSpriteName:@"greenball" atPoint:CGPointMake(100, 100) withBounce:YES withVelocity:[self backwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
     
-    [self addBallOfType:@"hRedBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"redball" atPoint:CGPointMake(200, 100) withBounce:YES withVelocity:[self hitTotopWithSpeed:60] andHitCategory:pinkBallHitCategory];
     
-    [self addBallOfType:@"hYellowBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"yellowball" atPoint:CGPointMake(400, 100) withBounce:YES withVelocity:[self hitToLeftWithSpeed:80] andHitCategory:blueBallHitCategory];
     
-    [self addBallOfType:@"hBlackBall.png" ofSize:CGSizeMake(75, 75) addSpriteName:@"blackball" atPoint:CGPointMake(200, 300) withBounce:YES withVelocity:[self forwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
+    [self addBallOfType:hRedBall ofSize:CGSizeMake(75, 75) addSpriteName:@"yellowball" atPoint:CGPointMake(400, 100) withBounce:YES withVelocity:[self hitToLeftWithSpeed:80] andHitCategory:blueBallHitCategory];
+    
+    [self addBallOfType:hGreenBall ofSize:CGSizeMake(75, 75) addSpriteName:@"blackball" atPoint:CGPointMake(200, 300) withBounce:YES withVelocity:[self forwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
 
     [self addChild:_background];
     
@@ -127,9 +138,9 @@ static NSString * const kRingNodeName       = @"movable";
     return CGVectorMake(speed, 0);
 }
 
--(CGVector)hitTotopWithSpeed:(float)spped{
+-(CGVector)hitTotopWithSpeed:(float)speed{
     
-    return CGVectorMake(0, spped);
+    return CGVectorMake(0, speed);
 }
 
 -(CGVector)hitToBottomWithSpeed:(float)speed{
@@ -148,7 +159,7 @@ static NSString * const kRingNodeName       = @"movable";
 }
 
 
-//add methods to positipon the ball
+//add methods to position the ball
 
 
 -(CGPoint)addBallAtCenterWithOffsetX:(int)x withOffsetY:(int)y{
