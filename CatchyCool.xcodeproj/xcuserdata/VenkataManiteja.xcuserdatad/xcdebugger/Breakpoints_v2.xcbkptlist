@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CatchyCool/GameScene.m"
-            timestampString = "471445565.748839"
+            timestampString = "471796243.906474"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
-            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
+            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:addEmitter:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CatchyCool/GameScene.m"
-            timestampString = "471445565.748839"
+            timestampString = "471797596.47005"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
-            landmarkName = "-touchesMoved:withEvent:"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
+            landmarkName = "-touchesBegan:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CatchyCool/GameScene.m"
-            timestampString = "471445565.748839"
+            timestampString = "471797596.47005"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
-            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:addEmitter:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CatchyCool/GameScene.m"
-            timestampString = "471445565.748839"
+            timestampString = "471797596.47005"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
+            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:addEmitter:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,12 +74,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CatchyCool/GameScene.m"
-            timestampString = "471445565.748839"
+            timestampString = "471796243.906474"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "-addBallOfType:ofSize:addSpriteName:atPoint:withBounce:withVelocity:andHitCategory:"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "-removeAllBalls"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -17,8 +17,10 @@
 		B80D9D571C0CAAF6004A1FF6 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B80D9D561C0CAAF6004A1FF6 /* SpriteKit.framework */; };
 		B8296FA61C0CD86E003885D7 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = B8296FA41C0CD86E003885D7 /* spark.png */; };
 		B8296FAC1C0CDA95003885D7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = B8296FAB1C0CDA95003885D7 /* GameScene.sks */; };
-		B8296FB21C0CE0EB003885D7 /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = B8296FB11C0CE0EB003885D7 /* MyParticle.sks */; };
+		B8296FB21C0CE0EB003885D7 /* GParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = B8296FB11C0CE0EB003885D7 /* GParticle.sks */; };
 		B82F46371C11F3F00024C0BA /* basketBall bounce.WAV in Resources */ = {isa = PBXBuildFile; fileRef = B82F46361C11F3F00024C0BA /* basketBall bounce.WAV */; };
+		B83EDB551C1F046B008A9BB6 /* RParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = B83EDB541C1F046B008A9BB6 /* RParticle.sks */; };
+		B83EDB581C1F04A5008A9BB6 /* BParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = B83EDB561C1F04A5008A9BB6 /* BParticle.sks */; };
 		B8EE5AF91C10AEF400DC7855 /* hue_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = B8EE5AF81C10AEF400DC7855 /* hue_ring.png */; };
 		E512E7511C1CDE59005A9A93 /* spacebackground.png in Resources */ = {isa = PBXBuildFile; fileRef = E512E7501C1CDE59005A9A93 /* spacebackground.png */; };
 		E512E75C1C1CE1BE005A9A93 /* Bplanet_25.png in Resources */ = {isa = PBXBuildFile; fileRef = E512E7521C1CE1BE005A9A93 /* Bplanet_25.png */; };
@@ -49,8 +51,10 @@
 		B80D9D561C0CAAF6004A1FF6 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		B8296FA41C0CD86E003885D7 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		B8296FAB1C0CDA95003885D7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		B8296FB11C0CE0EB003885D7 /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
+		B8296FB11C0CE0EB003885D7 /* GParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GParticle.sks; sourceTree = "<group>"; };
 		B82F46361C11F3F00024C0BA /* basketBall bounce.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "basketBall bounce.WAV"; sourceTree = "<group>"; };
+		B83EDB541C1F046B008A9BB6 /* RParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RParticle.sks; sourceTree = "<group>"; };
+		B83EDB561C1F04A5008A9BB6 /* BParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = BParticle.sks; path = ../BParticle.sks; sourceTree = "<group>"; };
 		B8EE5AF81C10AEF400DC7855 /* hue_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hue_ring.png; sourceTree = "<group>"; };
 		E512E7501C1CDE59005A9A93 /* spacebackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacebackground.png; sourceTree = "<group>"; };
 		E512E7521C1CE1BE005A9A93 /* Bplanet_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bplanet_25.png; sourceTree = "<group>"; };
@@ -102,7 +106,9 @@
 				B80D9D3C1C0C964E004A1FF6 /* GameScene.h */,
 				B80D9D3D1C0C964E004A1FF6 /* GameScene.m */,
 				B8296FAB1C0CDA95003885D7 /* GameScene.sks */,
-				B8296FB11C0CE0EB003885D7 /* MyParticle.sks */,
+				B8296FB11C0CE0EB003885D7 /* GParticle.sks */,
+				B83EDB541C1F046B008A9BB6 /* RParticle.sks */,
+				B83EDB561C1F04A5008A9BB6 /* BParticle.sks */,
 				B82F46361C11F3F00024C0BA /* basketBall bounce.WAV */,
 				B80D9D411C0C964E004A1FF6 /* GameViewController.h */,
 				B80D9D421C0C964E004A1FF6 /* GameViewController.m */,
@@ -204,13 +210,15 @@
 				E512E7641C1CE1BE005A9A93 /* Rplanet_75.png in Resources */,
 				B8296FA61C0CD86E003885D7 /* spark.png in Resources */,
 				E512E7511C1CDE59005A9A93 /* spacebackground.png in Resources */,
+				B83EDB551C1F046B008A9BB6 /* RParticle.sks in Resources */,
 				E512E7651C1CE1BE005A9A93 /* Splanet_50.png in Resources */,
 				E512E7601C1CE1BE005A9A93 /* Gplanet_50.png in Resources */,
 				E512E75E1C1CE1BE005A9A93 /* Bplanet_75.png in Resources */,
+				B83EDB581C1F04A5008A9BB6 /* BParticle.sks in Resources */,
 				B82F46371C11F3F00024C0BA /* basketBall bounce.WAV in Resources */,
 				B80D9D4B1C0C964E004A1FF6 /* LaunchScreen.storyboard in Resources */,
 				B8EE5AF91C10AEF400DC7855 /* hue_ring.png in Resources */,
-				B8296FB21C0CE0EB003885D7 /* MyParticle.sks in Resources */,
+				B8296FB21C0CE0EB003885D7 /* GParticle.sks in Resources */,
 				B80D9D481C0C964E004A1FF6 /* Assets.xcassets in Resources */,
 				E512E75F1C1CE1BE005A9A93 /* Gplanet_25.png in Resources */,
 				E512E75D1C1CE1BE005A9A93 /* Bplanet_50.png in Resources */,

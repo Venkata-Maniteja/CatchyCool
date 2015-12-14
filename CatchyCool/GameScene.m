@@ -27,6 +27,11 @@ static  NSString * const sGreenBall=@"Gplanet_25.png";
 static  NSString * const hBlueBall=@"Bplanet_75.png";
 static  NSString * const mBlueBall=@"Bplanet_50.png";
 static  NSString * const sBlueBall=@"Bplanet_25.png";
+static  NSString * const kGEmitter=@"GParticle.png";
+static  NSString * const kREmitter=@"RParticle.png";
+static  NSString * const kBEmitter=@"BParticle.png";
+
+
 
 @interface GameScene ()<SKPhysicsContactDelegate>{
     
@@ -38,6 +43,8 @@ static  NSString * const sBlueBall=@"Bplanet_25.png";
 
 @property (nonatomic, strong) SKSpriteNode *background;
 @property (nonatomic, strong) SKSpriteNode *ringNode;
+
+@property (nonatomic,strong) NSString *emitterNodePath;
 
 
 @end
@@ -86,13 +93,13 @@ static  NSString * const sBlueBall=@"Bplanet_25.png";
     _background.position = CGPointMake(0,0);
     
     
-    [self addBallOfType:hBlueBall ofSize:CGSizeMake(75, 75) addSpriteName:@"greenball" atPoint:CGPointMake(100, 100) withBounce:YES withVelocity:[self backwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
+    [self addBallOfType:hBlueBall ofSize:CGSizeMake(75, 75) addSpriteName:@"greenball" atPoint:CGPointMake(100, 100) withBounce:YES withVelocity:[self backwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory addEmitter:YES];
     
     
     
-    [self addBallOfType:hRedBall ofSize:CGSizeMake(75, 75) addSpriteName:@"yellowball" atPoint:CGPointMake(400, 100) withBounce:YES withVelocity:[self hitToLeftWithSpeed:80] andHitCategory:blueBallHitCategory];
+    [self addBallOfType:hRedBall ofSize:CGSizeMake(75, 75) addSpriteName:@"yellowball" atPoint:CGPointMake(400, 100) withBounce:YES withVelocity:[self hitToLeftWithSpeed:80] andHitCategory:blueBallHitCategory addEmitter:YES];
     
-    [self addBallOfType:hGreenBall ofSize:CGSizeMake(75, 75) addSpriteName:@"blackball" atPoint:CGPointMake(200, 300) withBounce:YES withVelocity:[self forwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory];
+    [self addBallOfType:hGreenBall ofSize:CGSizeMake(75, 75) addSpriteName:@"blackball" atPoint:CGPointMake(200, 300) withBounce:YES withVelocity:[self forwardCrossHitWithSpeed:50] andHitCategory:blueBallHitCategory addEmitter:YES];
 
     [self addChild:_background];
     
@@ -111,7 +118,13 @@ static  NSString * const sBlueBall=@"Bplanet_25.png";
     _ringNode.zPosition = 200;
     [self addChild:_ringNode];
     
+    [self addEmitterNodes];
 
+}
+
+-(void)addEmitterNodes{
+    
+   
 }
 
 
@@ -211,7 +224,7 @@ static  NSString * const sBlueBall=@"Bplanet_25.png";
 }
 
 
--(void)addBallOfType:(NSString *)imageName ofSize:(CGSize) size addSpriteName:(NSString *)name atPoint:(CGPoint)point withBounce:(BOOL) bounce withVelocity:(CGVector)velocity andHitCategory:(int) category{
+-(void)addBallOfType:(NSString *)imageName ofSize:(CGSize) size addSpriteName:(NSString *)name atPoint:(CGPoint)point withBounce:(BOOL) bounce withVelocity:(CGVector)velocity andHitCategory:(int) category addEmitter:(BOOL) addEmitter{
     
     
     SKSpriteNode * ball = [SKSpriteNode spriteNodeWithImageNamed:imageName];
@@ -236,6 +249,36 @@ static  NSString * const sBlueBall=@"Bplanet_25.png";
     
     [self addChild:ball];
     
+    //need to add circular emitters
+    
+    if (addEmitter) {
+        
+        if ([imageName isEqualToString:sRedBall]||[imageName isEqualToString:mRedBall]||[imageName isEqualToString:hRedBall]) {
+          
+          _emitterNodePath =
+            [[NSBundle mainBundle] pathForResource:@"RParticle" ofType:@"sks"];
+        }
+        if ([imageName isEqualToString:sGreenBall]||[imageName isEqualToString:mGreenBall]||[imageName isEqualToString:hGreenBall]) {
+            
+            _emitterNodePath =
+            [[NSBundle mainBundle] pathForResource:@"GParticle" ofType:@"sks"];
+        }
+        if ([imageName isEqualToString:sBlueBall]||[imageName isEqualToString:mBlueBall]||[imageName isEqualToString:hBlueBall]) {
+            
+            _emitterNodePath =
+            [[NSBundle mainBundle] pathForResource:@"BParticle" ofType:@"sks"];
+        }
+        
+        
+        
+        SKEmitterNode *burstEmitter =
+        [NSKeyedUnarchiver unarchiveObjectWithFile:_emitterNodePath];
+        
+      
+        
+        [ball addChild:burstEmitter];
+    }
+   
     //need to add real physics to this method,like slow when hit something
   
     //applying impulse to bounce off
